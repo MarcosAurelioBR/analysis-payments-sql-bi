@@ -12,7 +12,7 @@ SELECT
     category_name,
     COUNT(*) AS qtd_transacoes,
     SUM(amount_value) AS volume_total_tpv,
-    AVG(amount_value) AS ticket_medio
+    CAST(AVG(amount_value) AS DECIMAL(10,2)) AS ticket_medio
 FROM vw_fact_payments_performance
 WHERE transaction_status = 'Success'
 GROUP BY category_name
