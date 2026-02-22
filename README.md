@@ -2,7 +2,7 @@
 
 Este projeto simula um ambiente real de Fintech, processando mais de **15 milhões de transações** para gerar insights sobre comportamento de consumo, saúde financeira e performance de vendas utilizando SQL Server.
 
-## 📂 Fonte de Dados
+## Fonte de Dados
 Os dados utilizados foram extraídos do Kaggle: [Transactions Fraud Datasets](https://www.kaggle.com/datasets/computingvictor/transactions-fraud-datasets/data).
 > **Nota:** Devido ao volume massivo (15M+ registros), o projeto utiliza **Views** e **CTEs** para otimizar o processamento e garantir a performance das consultas, evitando o consumo excessivo de memória física.
 
