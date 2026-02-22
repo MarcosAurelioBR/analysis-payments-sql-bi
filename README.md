@@ -1,79 +1,64 @@
-Etapa 1: Diagnóstico dos Dados
+# 💳 Projeto: Ecossistema de Análise de Pagamentos (Big Data)
 
-Nesta fase inicial, analisei a base bruta e identifiquei os pontos que precisavam de correção para viabilizar as análises:
+Este projeto simula um ambiente real de Fintech, processando mais de **15 milhões de transações** para gerar insights sobre comportamento de consumo, saúde financeira e performance de vendas utilizando SQL Server.
 
-    Problemas com Números: Colunas importantes como valor da compra (amount) e renda anual (yearly_income) estavam como texto, o que impedia qualquer cálculo matemático.
+## 📂 Fonte de Dados
+Os dados utilizados foram extraídos do Kaggle: [Transactions Fraud Datasets](https://www.kaggle.com/datasets/computingvictor/transactions-fraud-datasets/data).
+> **Nota:** Devido ao volume massivo (15M+ registros), o projeto utiliza **Views** e **CTEs** para otimizar o processamento e garantir a performance das consultas, evitando o consumo excessivo de memória física.
 
-    Formato de Datas: As datas também estavam como texto, impossibilitando organizar os gastos por dia, mês ou ano.
+---
 
-    Sujeira nos Campos: Presença de caracteres como o cifrão ($) e espaços vazios que atrapalhavam a leitura dos dados.
+##  Ciclo de Desenvolvimento
 
-    Grande Volume: A base de transações tem 15 milhões de registros, o que exige queries bem estruturadas para não travar o sistema.
+### Etapa 1: Diagnóstico dos Dados 
+Nesta fase inicial, analisei a base bruta e identifiquei os "gargalos" técnicos que inviabilizariam análises diretas:
+* **Inconsistência de Tipos:** Colunas críticas como `amount` e `yearly_income` estavam formatadas como texto (varchar).
+* **Formatos de Data:** Datas armazenadas como string, impossibilitando a ordenação cronológica e cálculos de recorrência.
+* **Sujeira nos Campos:** Presença de caracteres especiais como `$` e espaços vazios.
+* **Desafio de Escala:** A necessidade de processar 15 milhões de linhas sem comprometer a estabilidade do sistema.
 
-O que foi feito:
+**Script de Referência:** `01_exploration/01_data_profiling.sql`
 
-O script 01_exploration/01_data_profiling.sql validou as seguintes necessidades:
+---
 
-    Limpeza Financeira: Remover o $ e converter os valores para formato numérico para somar totais e calcular médias.
+### Etapa 2: Limpeza e Transformação (Data Cleaning)
+Utilizei a estratégia de **Camadas de Visualização (Views)** para transformar os dados brutos em informação útil sem alterar a base original (preservando o Data Lake):
+* **`vw_transactions_cleaned`**: Implementação de `TRY_CONVERT` para blindagem contra erros de data (Erro 242) e limpeza de símbolos monetários via `REPLACE`.
+* **`vw_users_cleaned`**: Padronização da renda anual e criação da métrica de **Índice de Endividamento**, que mede o comprometimento financeiro do cliente.
 
-    Ajuste de Calendário: Converter as datas para o formato correto, permitindo ver a evolução das vendas no tempo.
+**Script de Referência:** `02_cleaning/01_vw_transactions_cleaned.sql`
 
-    Padronização de Erros: As transações sem erro estavam vazias. Padronizei para 'Success' para facilitar a contagem no Dashboard.
+---
 
-    Uso de Views: Como a base é muito grande, decidi usar Views. Assim, mantenho os dados originais guardados e crio uma camada de leitura muito mais rápida para o BI.
+### Etapa 3: Modelagem de Dados (Star Schema)
+Criação de uma **Tabela Mestra (Fact View)** unificada para servir de "coração" às análises de BI:
+* **Unificação:** Integração de transações, perfis demográficos de usuários e categorias de mercadores (MCC) via `INNER JOIN`.
+* **Performance:** A estrutura foi projetada para que ferramentas como Power BI ou Tableau realizem filtros instantâneos (por gênero, estado ou categoria) sem a necessidade de processamento pesado em tempo de execução.
 
-Etapa 2: Limpeza e Transformação
+**Script de Referência:** `03_modeling/01_fact_payments_performance.sql`
 
-Com os problemas mapeados, criei os scripts para limpar e organizar os dados de transações e usuários.
+---
 
-O que foi feito:
+### Etapa 4: Resultados e Insights de Negócio
+Com a estrutura modelada, extraímos indicadores estratégicos para tomada de decisão:
 
-Utilizei Views para transformar os dados brutos em informações prontas para o uso, sem alterar a base original:
+#### 1. Performance Financeira
+* **TPV (Total Payment Volume):** Consolidação do faturamento bruto aprovado.
+* **Ticket Médio:** Identificação de categorias líderes de faturamento, com destaque para *Money Transfer*.
 
-    vw_transactions_cleaned: Corrigi os valores em dinheiro, tratei os nomes dos erros e ajustei o formato da data (resolvendo conflitos de leitura do sistema).
+#### 2. Análise de Risco e Crédito
+* **Motivos de Recusa:** Identificamos que **61.92%** das negativas ocorrem por "Saldo Insuficiente", correlacionando-se diretamente com o alto índice de endividamento mapeado na Etapa 2.
+* **Perfil de Crédito:** Clientes com Score Alto apresentam estabilidade, mas com um índice de endividamento médio de **1.30**, sugerindo oportunidade para produtos de refinanciamento.
 
-    vw_users_cleaned: Limpei a renda dos clientes e criei um cálculo de Endividamento, que mostra o quanto da renda do cliente está comprometida.
+#### 3. Deep Analytics (SQL Sênior)
+Implementação de queries avançadas para extrair inteligência de dados:
+* **Análise de Recorrência:** Cálculo do tempo médio (em minutos) entre compras utilizando a função de janela `LAG`.
+* **Detecção de Anomalias:** Aplicação de **Z-Score** para identificar transações suspeitas ou fora do padrão de gasto por categoria.
+* **Crescimento Mensal (MoM):** Monitoramento de faturamento mensal com cálculo de variação percentual e Médias Móveis.
 
-Etapa 3: Modelagem dos Dados
+**Scripts de Referência:** `04_insights/01_business_queries.sql` e `04_insights/02_advanced_analytics.sql`
 
-Nesta etapa, o foco foi juntar as peças. Em vez de trabalhar com várias tabelas espalhadas, criei uma Tabela Mestra.
+---
 
-O que foi feito:
-
-Criei a View final vw_fact_payments_performance, que é o "coração" do projeto:
-
-    Unificação: Juntei os dados de transações, os perfis dos usuários e os nomes das categorias de lojas em um só lugar.
-
-    Dados Prontos: Com tudo unificado, o Dashboard não precisa fazer cálculos pesados toda hora. Ele já recebe os dados prontos para mostrar os gráficos.
-
-    Filtros Rápidos: A estrutura foi montada para permitir filtros instantâneos por categoria de gasto, gênero e pontuação de crédito (Score).
-
-Etapa 4: Resultados e Insights de Negócio
-
-Com a estrutura pronta, já conseguimos extrair indicadores importantes para a tomada de decisão:
-1. Desempenho Financeiro
-
-    Volume Total (TPV): Valor total de vendas aprovadas.
-
-    Ticket Médio: Valor médio gasto por compra em cada categoria.
-
-    Principais Setores: Identificamos que Money Transfer (Transferência de Dinheiro) é a categoria com maior volume financeiro.
-
-2. Análise de Risco
-
-    Taxa de Aprovação: Proporção entre compras aprovadas e negadas.
-
-    Motivos de Recusa: O principal motivo de cancelamento foi Saldo Insuficiente, o que faz sentido, já que identificamos um alto índice de endividamento na base de usuários.
-
-3. Perfil do Cliente
-
-    Gastos por Gênero: Comparação de consumo entre homens e mulheres.
-
-    Comportamento: Identificação de clientes fiéis que usam o cartão com recorrência.
-
-### Validação dos Dados
-Para extrair os indicadores acima, foram desenvolvidas queries de agregação que consolidam os 15 milhões de registros. Os scripts completos podem ser encontrados na pasta `/04_insights`.
-
-**Exemplo de insight extraído:**
-* **Risco:** 61.92% das negativas de pagamento concentram-se em "Saldo Insuficiente", permitindo uma ação direcionada para aumento de limites ou produtos de crédito para perfis específicos.
-* **Perfil:** Clientes com Score Alto apresentam um índice de endividamento de 1.30, confirmando a estabilidade da base principal.
+## 🏁 Conclusão
+Este projeto demonstra maturidade técnica para lidar com **Big Data**, percorrendo todo o fluxo de dados: desde a limpeza e tratamento de erros complexos de conversão até a modelagem analítica e extração de insights estatísticos de alto nível.
