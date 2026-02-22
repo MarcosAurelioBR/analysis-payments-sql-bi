@@ -60,5 +60,5 @@ Implementação de queries avançadas para extrair inteligência de dados:
 
 ---
 
-## 🏁 Conclusão
+## Conclusão
 Este projeto demonstra maturidade técnica para lidar com **Big Data**, percorrendo todo o fluxo de dados: desde a limpeza e tratamento de erros complexos de conversão até a modelagem analítica e extração de insights estatísticos de alto nível.
