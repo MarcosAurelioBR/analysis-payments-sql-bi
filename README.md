@@ -50,7 +50,7 @@ Com a estrutura modelada, extraímos indicadores estratégicos para tomada de de
 * **Motivos de Recusa:** Identificamos que **61.92%** das negativas ocorrem por "Saldo Insuficiente", correlacionando-se diretamente com o alto índice de endividamento mapeado na Etapa 2.
 * **Perfil de Crédito:** Clientes com Score Alto apresentam estabilidade, mas com um índice de endividamento médio de **1.30**, sugerindo oportunidade para produtos de refinanciamento.
 
-#### 3. Deep Analytics (SQL Sênior)
+#### 3. Deep Analytics 
 Implementação de queries avançadas para extrair inteligência de dados:
 * **Análise de Recorrência:** Cálculo do tempo médio (em minutos) entre compras utilizando a função de janela `LAG`.
 * **Detecção de Anomalias:** Aplicação de **Z-Score** para identificar transações suspeitas ou fora do padrão de gasto por categoria.
