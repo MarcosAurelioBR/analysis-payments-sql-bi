@@ -58,6 +58,30 @@ Implementação de queries avançadas para extrair inteligência de dados:
 
 **Scripts de Referência:** `04_insights/01_business_queries.sql` e `04_insights/02_advanced_analytics.sql`
 
+#### Etapa 5: Dashboard e Business Intelligence
+
+Nesta fase final, conectei o Power BI às Views do SQL Server para criar uma camada de visualização estratégica voltada para o mercado brasileiro. Realizei a localização dos dados, traduzindo termos técnicos e adaptando a moeda para facilitar o consumo por gestores locais.
+Tratamento e Modelagem (Power Query)
+
+Conforme evidenciado nas capturas de tela do projeto:
+
+    Limpeza Adicional: Realizei a renomeação de colunas e ajuste de tipos de dados (Data/Hora separadas) para otimizar o modelo de dados.
+
+    Relacionamentos: Implementei um modelo Star Schema, utilizando uma tabela Calendário para permitir análises temporais precisas e relacionando as dimensões de usuários, transações e categorias.
+
+Inteligência de Dados (DAX)
+
+Desenvolvi medidas avançadas para extrair indicadores de crescimento e tendência.
+
+Insights Visuais
+
+O dashboard final apresenta uma interface de alto impacto (Dark Mode) com:
+
+    Cartões de KPI Dinâmicos: Exibição de valores absolutos com indicadores de tendência (Sparklines) e variação percentual.
+
+    Visão por Segmento: Gráfico de barras horizontais identificando os setores com maior volume transacional (ex: Money Transfer e Grocery Stores).
+
+    Sazonalidade: Monitoramento mensal do volume de vendas para suporte à estratégia de marketing e estoque.
 ---
 
 ## Conclusão
