@@ -85,4 +85,5 @@ O dashboard final apresenta uma interface de alto impacto (Dark Mode) com:
 ---
 
 ## Conclusão
-Este projeto demonstra maturidade técnica para lidar com **Big Data**, percorrendo todo o fluxo de dados: desde a limpeza e tratamento de erros complexos de conversão até a modelagem analítica e extração de insights estatísticos de alto nível.
+
+Este projeto demonstrou o ciclo completo de uma solução de Business Intelligence, desde a ingestão de um volume massivo de dados (15M+ de linhas) no SQL Server até a entrega de insights estratégicos no Power BI. A aplicação de práticas de engenharia de dados, como a modelagem Star Schema e a otimização de consultas, permitiu a criação de um ecossistema de análise robusto, performático e orientado à tomada de decisão.
