@@ -60,7 +60,7 @@ Implementação de queries avançadas para extrair inteligência de dados:
 
 #### Etapa 5: Dashboard e Business Intelligence
 
-Nesta fase final, conectei o Power BI às Views do SQL Server para criar uma camada de visualização estratégica voltada para o mercado brasileiro. Realizei a localização dos dados, traduzindo termos técnicos e adaptando a moeda para facilitar o consumo por gestores locais.
+Nesta fase final, conectei o Power BI às Views do SQL Server para criar uma camada de visualização estratégica. Realizei a localização semântica dos dados, traduzindo termos técnicos e categorias para o português (BR), facilitando a tomada de decisão para gestores locais sem perder a rastreabilidade dos valores originais em dólar.
 Tratamento e Modelagem (Power Query)
 
 Conforme evidenciado nas capturas de tela do projeto:
